@@ -5,6 +5,7 @@ import re
 import json
 import os
 from urllib.parse import quote
+import sys
 
 url = "https://getcomics.info/page/{}/?s={}"
 links_dict = {}
@@ -52,6 +53,8 @@ def getcomic_downloader(page, search):
             print(link)
             links_dict[heading] = link
             download_file(link, heading)
+    except KeyboardInterrupt:
+        sys.exit(0)
     except:
         pass
 if __name__ == "__main__":
