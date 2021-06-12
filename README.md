@@ -11,10 +11,13 @@ This is for downloading comics from getscomics website [link](https://getcomics.
 python3 getcomic-downloader.py -o <pages> <search>
 ```
 all the files will be downloaded to the downloads folder
+* if you have downloaded files till page 4. you can use the slice property to get other part of the comic eg
+```
+python3 getcomic-downloader.py -o 5-10 "spider-man"
+```
 
 ### What can de done after this
 * Probably solve some of the bugs in it
-* Use threading to speedup the download (Though im not sure the server can handle all the bandwidth so we need to be careful)
 * It can be made as a module to be used with other programs
 
 ### Bugs

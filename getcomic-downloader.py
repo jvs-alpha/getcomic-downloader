@@ -6,6 +6,8 @@ import json
 import os
 from urllib.parse import quote
 import sys
+import threading
+import logging
 
 url = "https://getcomics.info/page/{}/?s={}"
 links_dict = {}
@@ -60,6 +62,7 @@ def getcomic_downloader(page, search):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="This is getcomic doenloader")
     parser.add_argument("-o", "--output", help="This is for saving the links for the books in json", action="store_true")
+    parser.add_argument("-s", "--speed", help="This will make the process speedup with threading but it will allocate a lot of ram so do not used it with too many pages", action="store_true")
     parser.add_argument("pages", type=str, help="The number of pages to download from")
     parser.add_argument("search", type=str, help="The name to search in getcomic")
     argv = parser.parse_args()
@@ -74,9 +77,15 @@ if __name__ == "__main__":
         else:
             print("Start values must be less then the ending one")
             sys.exit(1)
+    count = 0
     for page in range(start,end+1):
+        count += 1
         print(page)
         print(quote(argv.search))
-        getcomic_downloader(page, quote(argv.search))
+        if argv.speed:
+            x = threading.Thread(target=getcomic_downloader, args=(page,quote(argv.search)))
+            x.start()
+        else:
+            getcomic_downloader(page, quote(argv.search))
     if argv.output:
         write_to_json(links_dict,  "links.json")
