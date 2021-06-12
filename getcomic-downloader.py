@@ -5,6 +5,7 @@ import re
 import json
 import os
 from urllib.parse import quote
+import sys
 
 url = "https://getcomics.info/page/{}/?s={}"
 links_dict = {}
@@ -57,10 +58,21 @@ def getcomic_downloader(page, search):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="This is getcomic doenloader")
     parser.add_argument("-o", "--output", help="This is for saving the links for the books in json", action="store_true")
-    parser.add_argument("pages", type=int, help="The number of pages to download from")
+    parser.add_argument("pages", type=str, help="The number of pages to download from")
     parser.add_argument("search", type=str, help="The name to search in getcomic")
     argv = parser.parse_args()
-    for page in range(1,argv.pages+1):
+    pages = argv.pages.split("-")
+    if len(pages) == 1:
+        start = 1
+        end = int(pages[0])
+    else:
+        if int(pages[0]) <= int(pages[1]):
+            start = int(pages[0])
+            end = int(pages[1])
+        else:
+            print("Start values must be less then the ending one")
+            sys.exit(1)
+    for page in range(start,end+1):
         print(page)
         print(quote(argv.search))
         getcomic_downloader(page, quote(argv.search))
