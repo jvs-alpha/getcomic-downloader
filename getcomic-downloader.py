@@ -13,16 +13,27 @@ url = "https://getcomics.info/page/{}/?s={}"
 links_dict = {}
 
 headers_dict = {
-"accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-"accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
-"cache-control": "max-age=0",
-"sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Google Chrome\";v=\"90\"",
-"sec-ch-ua-mobile": "?0",
-"sec-fetch-dest": "document",
-"sec-fetch-mode": "navigate",
-"sec-fetch-site": "same-origin",
-"sec-fetch-user": "?1",
-"upgrade-insecure-requests": "1"
+  "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+  "accept-language": "en-IN,en-GB;q=0.9,en-US;q=0.8,en;q=0.7,fr;q=0.6",
+  "sec-ch-ua": "\" Not;A Brand\";v=\"99\", \"Google Chrome\";v=\"91\", \"Chromium\";v=\"91\"",
+  "sec-ch-ua-mobile": "?0",
+  "sec-fetch-dest": "document",
+  "sec-fetch-mode": "navigate",
+  "sec-fetch-site": "same-origin",
+  "sec-fetch-user": "?1",
+  "upgrade-insecure-requests": "1"
+}
+
+headers_dict2 = {
+  "accept": "*/*",
+  "accept-language": "en-IN,en-GB;q=0.9,en-US;q=0.8,en;q=0.7,fr;q=0.6",
+  "origin": "https://disqus.com",
+  "sec-ch-ua": "\" Not;A Brand\";v=\"99\", \"Google Chrome\";v=\"91\", \"Chromium\";v=\"91\"",
+  "sec-ch-ua-mobile": "?0",
+  "sec-fetch-dest": "script",
+  "sec-fetch-mode": "cors",
+  "sec-fetch-site": "cross-site",
+  "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36"
 }
 
 def write_to_json(json_dict, filename):
@@ -31,7 +42,7 @@ def write_to_json(json_dict, filename):
         f.write(jsonv)
 
 def download_file(link, filename):
-    r = requests.get(link, headers=headers_dict, allow_redirects=True)
+    r = requests.get(link, headers=headers_dict, allow_redirects=False)
     if ".zip" in link:
         filename = filename + ".zip"
     else:
