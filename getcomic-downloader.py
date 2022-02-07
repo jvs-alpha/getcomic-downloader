@@ -7,7 +7,7 @@ import os
 from urllib.parse import quote
 import sys
 import threading
-import logging
+from fp.fp import FreeProxy
 
 url = "https://getcomics.info/page/{}/?s={}"
 links_dict = {}
@@ -36,13 +36,16 @@ headers_dict2 = {
   "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36"
 }
 
+def get_proxies():
+    return {"http": FreeProxy(rand=True).get()}
+
 def write_to_json(json_dict, filename):
     jsonv = json.dumps(json_dict, indent=True)
     with open(filename, "w") as f:
         f.write(jsonv)
 
 def download_file(link, filename):
-    r = requests.get(link, headers=headers_dict, allow_redirects=False)
+    r = requests.get(link, proxies=get_proxies(), headers=headers_dict, allow_redirects=False)
     if ".zip" in link:
         filename = filename + ".zip"
     else:
@@ -52,13 +55,13 @@ def download_file(link, filename):
 
 def getcomic_downloader(page, search):
     try:
-        r = requests.get(url.format(page, search), headers=headers_dict)
+        r = requests.get(url.format(page, search), proxies=get_proxies(), headers=headers_dict)
         parsed_data = BeautifulSoup(r.content, "html.parser")
         posts_lists = parsed_data.find_all("article")
         for p in posts_lists:
             page_url = p.find_all("a")[2].get("href")
             heading = p.find_all("h1")[0].text
-            r2 = requests.get(page_url, headers=headers_dict)
+            r2 = requests.get(page_url, proxies=get_proxies(), headers=headers_dict)
             page_parsed = BeautifulSoup(r2.content, "html.parser")
             download_button = str(page_parsed.find_all("div", {"class": "aio-button-center"})[0])
             link_re = re.compile(r"https:\/\/[a-zA-Z0-9.\/\%\-\=\+\:]*")

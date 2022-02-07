@@ -3,6 +3,7 @@ This is for downloading comics from getscomics website [link](https://getcomics.
 
 ### Needed Packages
 * BeautifulSoup
+* https://github.com/jundymek/free-proxy
 
 ### How to Use it
 * First make a directory here names "downloads"
